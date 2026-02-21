@@ -1,8 +1,3 @@
-Perfect, this is **Best Time to Buy and Sell Stock (LeetCode 121)**.
-I’ll explain it **slowly, like a teacher to a student**, build intuition step by step, convert **all approaches to Python**, include **dry runs**, and end with **clean summaries**.
-
----
-
 # Best Time to Buy and Sell Stock (LeetCode 121)
 
 ## Problem in one line
@@ -318,11 +313,3 @@ Appears again in:
 
 ---
 
-If you want next:
-
-* Stock II (multiple transactions)
-* Kadane vs stock comparison
-* Common mistakes checklist
-* One-page revision notes
-
-Just say the word.
