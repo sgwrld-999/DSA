@@ -1,14 +1,3 @@
-Below are **complete, structured notes** for **Rotate Array (LeetCode 189)** with
-✅ **Python conversion of all approaches**
-✅ **Clear observations**
-✅ **Why each approach works**
-✅ **Dry runs for each approach**
-✅ **Compressed summaries for revision**
-
-Written in the **same serious interview-prep note style** you’ve been using.
-
----
-
 # Rotate Array (LeetCode 189)
 
 ## Problem in one line
@@ -313,13 +302,4 @@ nums = [1,2,3,4,5,6,7], k = 3
 * If formula `(i+k)%n` appears → extra array approach
 * If brute force seems easy → probably not optimal
 
----
 
-If you want next:
-
-* Left rotation variant
-* Rotate linked list
-* Common rotation mistakes checklist
-* One-page revision sheet
-
-Just tell me.
