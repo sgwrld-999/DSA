@@ -1,8 +1,3 @@
-Here’s a strong **interview script** you can say for the **Top K Frequent Elements using min heap** solution.
-
-You can speak it almost as-is in an interview.
-
----
 
 # Interview Script
 
@@ -250,7 +245,4 @@ If you want a short version to memorize:
 
 **“I first count frequencies using a hash map. Then I maintain a min heap of size `k`, where each entry is `(frequency, number)`. For every unique number, I push it into the heap, and if the heap size exceeds `k`, I pop the smallest frequency. This ensures the heap always contains the top `k` most frequent elements. Finally, I extract the numbers from the heap. This takes `O(n + m log k)` time and `O(m)` space.”**
 
----
-
-If you want, I can also write the **same interview script for the sorting approach** so you can explain both approaches confidently.
 
