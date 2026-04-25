@@ -1,119 +1,216 @@
-#include <iostream>
-#include <vector>
+# **Sliding Window Technique — Notes (from scratch, simple thinking)**
 
-using namespace std;
+## **1. What is the actual problem we are solving?**
 
-/*
-Problem statement: In the given problem statement it would be mention to find the subarray/substring which can be both fixed or variable.
+You are given:
 
-Brute Force:
-    - We'll find all the given subarrays or substring.
-    - Find the required thing which can be largest/ maximum or minimum/ smallest.
+* an **array** or a **string**
 
+And the question says:
 
-How we can know the given solution can be Optimized?
-1. Repeated work
-2. High time complexity
-3. Unnecessary Operations
+* find something inside a **subarray / substring**
 
-How to identify the given problem statement can be solved using the sliding window technique?
-1. Given array or string
-2. Sub-array or sub-string
-3. Find the largest/maximum or smallest/minimum
+Example:
 
-Types of sliding window:
-1. Fixed: The size of the given window or sub-array/sub-string is fixed
-2. Dynamic: Can be changed according to the given problem statement.
+* max sum of subarray of size `k`
+* longest substring without repeating characters
 
+---
 
-Problems based upon the:
--- Fixed SWT:
-    1. Max/Min subarray of size K
-    2. 1st -ve element in every window size of K
-    3. Count occurrence of anagrams
-    4. Max of all subarrays of size K
-    5. Max of mins for every win size
--- Variable
-    1. Largest / Smallest subarray of sum K
-    2. Largest sub-string of K distinct characters
-    3. Length of largest sub-string with NO repeating characters
-    4. Pick Toy
-    5. Minimum window substring
+## **2. How would you normally solve it (Brute Force)?**
 
+You would:
 
-TUG_Blog: https://takeuforward.org/sliding-window/constant-window
+* take every possible subarray
+* calculate answer for each
 
-*/
+Example:
 
-/*
-Generic template for Sliding Window Technique (SWT):alignas
+```
+[2, 1, 5, 1, 3], k = 3
 
-right = 0 , left = 0  windowSize(k) = k
+Subarrays:
+[2,1,5]
+[1,5,1]
+[5,1,3]
+```
 
-while (right < n) {
-    calculations or actions need to be performed by within the first window of size k
-    
-    if(right - left + 1 < k)  right++;
-    
-    if (right - left + 1 == k) {
-        // Perform actions for the current window
-        // e.g., calculate sum, find max/min, etc.
+For each → compute sum again and again
 
-        ans = from the calculations
+Problem:
 
-        //slide the window by incrementing left and adding the next element to the window
-        left++;
-        right++;
-    }
+* You are doing **repeated work**
+* Time complexity → **O(n²)**
 
+---
 
-*/
+## **3. Key Idea (This is Sliding Window)**
 
-// Code of the Sliding window
-class SlidingWindow
-{
-public:
-    // Function to find the maximum sum of any subarray of size k
-    int slidingWindowSolution(vector<int> &nums, int k)
-    {
-        int n = nums.size();
+Instead of recalculating everything:
 
-        // Edge case: if the array is smaller than k
-        if (n < k)
-            return 0;
+👉 **Reuse previous result**
 
-        int sum = 0;
+Think like this:
 
-        // Calculate the sum of the first 'k' elements
-        for (int i = 0; i < k; i++)
-        {
-            sum += nums[i];
-        }
+> “If I already know the sum of this window,
+> why compute it again from scratch?”
 
-        int maxSum = sum;
-        int l = 0;
+---
 
-        // Slide the window from index k to n - 1
-        for (int r = k; r < n; r++)
-        {
-            // Remove element going out of the window and add new element coming in
-            sum = sum - nums[l] + nums[r];
-            maxSum = max(maxSum, sum);
-            l++;
-        }
+### Example Thought:
 
-        return maxSum;
-    }
-};
+Window: `[2, 1, 5] → sum = 8`
 
-/*
- What to Say in an Interview
- I’m using the sliding window technique to find the maximum sum of any subarray of length k.
+Next window: `[1, 5, 1]`
 
- First, I calculate the sum of the initial k elements.
- Then, I slide the window one step at a time: remove the leftmost element and add the next rightmost element.
- At each step, I update the maximum sum found so far.
+Instead of recalculating:
 
- This gives an optimal O(n) time solution without recomputing the entire sum for each window.
+```
+(1 + 5 + 1)
+```
 
- */
+Do:
+
+```
+remove 2, add 1 → 8 - 2 + 1 = 7
+```
+
+👉 This is the whole idea.
+
+---
+
+## **4. What does "window" mean?**
+
+A window is just:
+
+* a **range of elements**
+* defined by two pointers:
+
+```
+[left .... right]
+```
+
+You:
+
+* expand window → move `right`
+* shrink window → move `left`
+
+---
+
+## **5. When to use Sliding Window?**
+
+Use it when:
+
+1. Array or string is given
+2. You are asked about **subarray / substring**
+3. You need:
+
+   * max / min
+   * length
+   * count
+
+---
+
+## **6. Types of Sliding Window**
+
+### **(A) Fixed Window (size = k)**
+
+* size never changes
+
+Example:
+
+* max sum of subarray of size k
+
+---
+
+### **(B) Variable Window**
+
+* size changes dynamically
+
+Example:
+
+* longest substring without repeating characters
+
+---
+
+## **7. Generic Template (Fixed Window)**
+
+Now understand step by step:
+
+```python
+left = 0
+window_sum = 0
+
+for right in range(len(nums)):
+
+    # Step 1: include new element
+    window_sum += nums[right]
+
+    # Step 2: if window size < k → expand
+    if right - left + 1 < k:
+        continue
+
+    # Step 3: window size == k → process
+    if right - left + 1 == k:
+        # calculate answer
+        ans = max(ans, window_sum)
+
+        # Step 4: slide window
+        window_sum -= nums[left]
+        left += 1
+```
+
+---
+
+## **8. Code Example**
+
+### **Problem: Maximum sum of subarray of size k**
+
+```python
+from typing import List
+
+class SlidingWindow:
+
+    def max_sum_subarray(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+
+        if n < k:
+            return 0
+
+        # Step 1: first window
+        window_sum = sum(nums[:k])
+        max_sum = window_sum
+
+        left = 0
+
+        # Step 2: slide window
+        for right in range(k, n):
+            window_sum = window_sum - nums[left] + nums[right]
+            max_sum = max(max_sum, window_sum)
+            left += 1
+
+        return max_sum
+```
+
+---
+
+## **9. What is actually happening (real understanding)**
+
+You are doing only 3 operations repeatedly:
+
+1. Add new element (right side)
+2. Remove old element (left side)
+3. Update answer
+
+That’s it. Nothing fancy.
+
+---
+
+## **10. How to explain in interview**
+
+“I treat a subarray as a window with two pointers.
+Instead of recomputing the sum for every subarray, I reuse the previous window result.
+
+I add the next element and remove the previous one, which reduces time complexity from O(n²) to O(n).”
+
+---
